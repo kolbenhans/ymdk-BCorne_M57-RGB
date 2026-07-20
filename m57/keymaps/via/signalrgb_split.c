@@ -11,6 +11,7 @@
 
 #include QMK_KEYBOARD_H
 #include <string.h>
+#include "transactions.h"
 #include "signalrgb_split.h"
 
 RGB signalrgb_colors[RGB_MATRIX_LED_COUNT];

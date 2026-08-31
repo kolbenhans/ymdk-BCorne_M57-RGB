@@ -1,5 +1,6 @@
 RGB_MATRIX_ENABLE = yes # required
 SRC += key_colors_hid.c
+SRC += audio_visualizer_hid.c
 
 RAW_ENABLE = yes
 VIA_ENABLE = yes

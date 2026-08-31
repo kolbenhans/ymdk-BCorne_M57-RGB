@@ -1,10 +1,12 @@
 #pragma once
 
-// Distinct from the `vial` keymap's UID so Vial GUI/WebGUI don't confuse
+// Distinct from the other keymaps' UIDs so Vial GUI/WebGUI don't confuse
 // cached per-keyboard config between keymaps on the same hardware.
-#define VIAL_KEYBOARD_UID {0x4B, 0xCB, 0x1D, 0x4D, 0x6E, 0xCA, 0xDA, 0x93}
+#define VIAL_KEYBOARD_UID {0xA9, 0xDE, 0x13, 0x81, 0x6E, 0x09, 0x90, 0xFA}
 
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_COMMUNITY_MODULE_key_colors
+
+// VIALRGB_ENABLE already comes from rules.mk (VIALRGB_ENABLE = yes)
 
 // Board default is 10 — this keymap only needs 6, and fewer layers means
 // less Vial dynamic-keymap EEPROM pressure too (see budget note below).
@@ -32,4 +34,5 @@
 // SPLIT_TRANSACTION_IDS_MODULE_* support):
 #define SPLIT_TRANSACTION_IDS_USER \
     KEY_COLORS_COLORS_DELTA, KEY_COLORS_BLINK_DELTA, KEY_COLORS_LOCK_FLAGS_DELTA, \
-    KEY_COLORS_COMMIT, KEY_COLORS_STARTUP
+    KEY_COLORS_COMMIT, KEY_COLORS_STARTUP, \
+    AUDIO_VISUALIZER_SYNC_RGB_DIRECT, AUDIO_VISUALIZER_ENTRY_WAVE_STARTUP

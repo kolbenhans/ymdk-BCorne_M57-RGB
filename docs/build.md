@@ -9,7 +9,7 @@ cd ~/projects/vial-qmk
 git submodule update --init --recursive --depth 1
 python3 -m pip install -r requirements.txt
 
-git clone --recursive https://github.com/kolbenhans/BCORNE.git ~/projects/BCORNE
+git clone --recursive https://github.com/kolbenhans/ymdk-BCorne_M57-RGB.git ~/projects/BCORNE
 ln -s ~/projects/BCORNE/m57_bcorne ~/projects/vial-qmk/keyboards/m57_bcorne
 cp ~/projects/BCORNE/ld/*.ld ~/projects/vial-qmk/platforms/chibios/boards/common/ld/
 ```

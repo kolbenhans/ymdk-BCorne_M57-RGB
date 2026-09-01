@@ -10,8 +10,8 @@ git submodule update --init --recursive --depth 1
 python3 -m pip install -r requirements.txt
 
 git clone --recursive https://github.com/kolbenhans/BCORNE.git ~/projects/BCORNE
-ln -s ~/projects/BCORNE/ymdk/m57_bcorne ~/projects/vial-qmk/keyboards/m57_bcorne
-cp ~/projects/BCORNE/ymdk/ld/*.ld ~/projects/vial-qmk/platforms/chibios/boards/common/ld/
+ln -s ~/projects/BCORNE/m57_bcorne ~/projects/vial-qmk/keyboards/m57_bcorne
+cp ~/projects/BCORNE/ld/*.ld ~/projects/vial-qmk/platforms/chibios/boards/common/ld/
 ```
 
 Windows without QMK MSYS: `mklink /D` instead of `ln -s` (admin).

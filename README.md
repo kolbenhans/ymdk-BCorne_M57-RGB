@@ -1,6 +1,8 @@
-# BCORNE (M57)
+# BORNE Knobs Corne4×6 (M57)
 
-Vial-QMK firmware for the "M57" split keyboard (Corne-style, STM32F401, TinyUF2 bootloader) — four keymaps, pick one, build it, flash it.
+Vial-QMK firmware for the BORNE Knobs Corne4×6 split keyboard (internal model
+name M57; Corne-style, STM32F401, TinyUF2 bootloader) — four keymaps, pick
+one, build it, flash it.
 
 Don't want to build it yourself? Prebuilt `.uf2` files are in [`firmware/`](firmware/) — skip to [Flashing](docs/flashing.md).
 

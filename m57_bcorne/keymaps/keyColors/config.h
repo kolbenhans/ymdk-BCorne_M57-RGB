@@ -6,11 +6,6 @@
 
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_COMMUNITY_MODULE_key_colors
 
-// Board default is 10 — this keymap only needs 6, and fewer layers means
-// less Vial dynamic-keymap EEPROM pressure too (see budget note below).
-#undef DYNAMIC_KEYMAP_LAYER_COUNT
-#define DYNAMIC_KEYMAP_LAYER_COUNT 6
-
 // Split sync buffer large enough for 29 LEDs × 3 bytes RGB (87 bytes) —
 // same size as the existing `vial` keymap already needs for its own
 // split-sync, so this board's WEAR_LEVELING/RPC setup already covers it.

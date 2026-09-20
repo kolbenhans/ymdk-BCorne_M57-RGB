@@ -150,6 +150,30 @@ void raw_hid_receive_kb(uint8_t *data, uint8_t length) {
             if (length < 5) return;
             handle_get_blink_colors(data);
             break;
+
+        case 0xB0: { // SET_LAYER: layer — force-switches the active layer (layer_move),
+                      // for external control (e.g. a host daemon reacting to focused window)
+            if (length < 3) return;
+            uint8_t layer = data[2];
+            if (layer >= DYNAMIC_KEYMAP_LAYER_COUNT) return;
+            layer_move(layer);
+
+            uint8_t resp[32] = {0};
+            resp[0] = 0x02;
+            resp[1] = 0xB0;
+            resp[2] = layer;
+            host_raw_hid_send(resp, sizeof(resp));
+            break;
+        }
+
+        case 0xB1: { // GET_LAYER: returns the currently active layer
+            uint8_t resp[32] = {0};
+            resp[0] = 0x02;
+            resp[1] = 0xB1;
+            resp[2] = get_highest_layer(layer_state);
+            host_raw_hid_send(resp, sizeof(resp));
+            break;
+        }
     }
 }
 

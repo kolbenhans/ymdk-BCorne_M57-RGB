@@ -1,0 +1,25 @@
+diff --git a/tmk_core/protocol/chibios/chibios.c b/tmk_core/protocol/chibios/chibios.c
+index 9dd625e854..1eca6556f8 100644
+--- a/tmk_core/protocol/chibios/chibios.c
++++ b/tmk_core/protocol/chibios/chibios.c
+@@ -156,9 +156,20 @@ void protocol_pre_init(void) {
+ 
+     /* Wait until USB is active */
+ #ifdef USB_WAIT_FOR_ENUMERATION
++#    ifdef USB_WAIT_FOR_ENUMERATION_TIMEOUT_MS
++    // Bounded variant: on a split keyboard the peripheral half never sees
++    // its own USB_ACTIVE (only the host-connected half does), so an
++    // unbounded wait here hangs it forever before it ever reaches
++    // split_pre_init() to determine that it *is* the peripheral. Give up
++    // after the timeout and continue normally either way.
++    for (uint16_t waited = 0; USB_DRIVER.state != USB_ACTIVE && waited < USB_WAIT_FOR_ENUMERATION_TIMEOUT_MS; waited += 50) {
++        wait_ms(50);
++    }
++#    else
+     while (USB_DRIVER.state != USB_ACTIVE) {
+         wait_ms(50);
+     }
++#    endif
+ #endif
+ 
+     /* Do need to wait here!

@@ -63,9 +63,11 @@
 #define WS2812_DMA_STREAM STM32_DMA1_STREAM2
 #define WS2812_DMA_CHANNEL 5
 
-// -----------------------------------------------------------------------------
-// Waits for USB enumeration to complete before continuing startup — meant to
-// fix reports of the keyboard not being recognized after a cold boot until
-// the cable is unplugged and replugged.
-// -----------------------------------------------------------------------------
-#define USB_WAIT_FOR_ENUMERATION
+// USB_WAIT_FOR_ENUMERATION was tried here to fix cold-boot USB recognition
+// issues, but protocol_pre_init() applies it unconditionally to *both*
+// halves of a split board — the peripheral half never gets its own USB
+// enumeration (it's only USB-wired when used standalone for flashing), so
+// it hung forever waiting for a state that never arrives, breaking the
+// right half whenever the left half was the one plugged into the host.
+// Reverted; needs a split-aware approach (e.g. only wait when this half is
+// USB host-connected) if the cold-boot issue gets revisited.

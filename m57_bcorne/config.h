@@ -62,15 +62,3 @@
 #define WS2812_PWM_PAL_MODE 2
 #define WS2812_DMA_STREAM STM32_DMA1_STREAM2
 #define WS2812_DMA_CHANNEL 5
-
-// Waits (briefly) for USB enumeration before continuing startup, meant to
-// fix reports of the keyboard not being recognized after a cold boot until
-// replugged. Bounded to 2s (see USB_WAIT_FOR_ENUMERATION_TIMEOUT_MS handling
-// in tmk_core/protocol/chibios/chibios.c) rather than QMK's default
-// unbounded wait — on this split board the peripheral half never reaches
-// its own USB_ACTIVE (only the host-connected half does), so an unbounded
-// wait hung it forever before it ever got to split_pre_init() to determine
-// it *is* the peripheral. With the timeout it just wastes up to 2s and
-// continues either way.
-#define USB_WAIT_FOR_ENUMERATION
-#define USB_WAIT_FOR_ENUMERATION_TIMEOUT_MS 2000

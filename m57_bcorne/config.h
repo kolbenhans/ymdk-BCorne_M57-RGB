@@ -62,3 +62,22 @@
 #define WS2812_PWM_PAL_MODE 2
 #define WS2812_DMA_STREAM STM32_DMA1_STREAM2
 #define WS2812_DMA_CHANNEL 5
+
+// Skip QMK's USB-suspend check at startup. Without it the firmware sits in a
+// suspend loop whenever the bus reports SUSPENDED, which on a cold boot (host
+// only brings USB up late, e.g. BIOS / disk-unlock prompt) can leave the
+// keyboard idle instead of enumerating. Side effect: no suspend handling, so
+// nothing gets powered down on host standby (RGB still turns off via its own
+// idle timeout in keyboard.json).
+#define NO_USB_STARTUP_CHECK
+
+// QMK force-enables SPLIT_USB_DETECT here (no USB_VBUS_PIN): the half with the
+// cable has to see USB_ACTIVE within this window after power-up, or it
+// declares itself slave and shuts its USB off (usb_disconnect() in
+// split_util.c). The half *without* a cable always sits out the full window
+// before it starts working — it has no local USB signal to exit early on —
+// so this has to stay short (BIOS-only keys like Delete can live on that
+// half). A slow host (disk-encryption prompt delaying USB bring-up) is
+// instead covered by the self-heal retry in m57_bcorne.c, which un-does a
+// wrong slave verdict once a host actually shows up, no replug needed.
+#define SPLIT_USB_TIMEOUT 3000

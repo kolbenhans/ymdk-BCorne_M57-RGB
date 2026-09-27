@@ -73,3 +73,64 @@ void bootloader_jump(void) {
     *(volatile uint32_t *)0x2000FC00UL = 0xC220B134UL;
     NVIC_SystemReset();
 }
+
+// Cold-boot USB self-heal. On a true cold power-up the host can see D+ raised
+// before our USB stack answers control transfers; its enumeration attempts
+// fail with -71 errors and the port backs off (many seconds to a working
+// keyboard, or dead until a physical replug behind some hubs). A
+// device-side disconnect/reconnect once we're fully initialized is equivalent
+// to that replug. Bounded: at most 3 retries, 3s apart, only until the
+// device reports CONFIGURED.
+#include "usb_device_state.h"
+#include "usb_main.h"
+#include "split_util.h"
+
+static void retry_master_enumeration(void) {
+    static uint32_t next_check = 1000; // first check ~1s after the main loop starts
+    static uint8_t  attempts   = 0;
+
+    if (attempts >= 3) return;
+    if (timer_read32() < next_check) return;
+
+    if (usb_device_state_get_configure_state() == USB_DEVICE_STATE_CONFIGURED) {
+        attempts = 3; // enumerated - done for this power-up
+        return;
+    }
+    attempts++;
+    next_check = timer_read32() + 3000;
+    restart_usb_driver(&USB_DRIVER);
+}
+
+// Master/slave self-heal. SPLIT_USB_TIMEOUT (config.h) is kept short so a
+// half without a cable isn't stuck for long — but that means a half *with*
+// a cable can just as easily lose the same short race on a slow host (e.g.
+// disk-encryption prompt delaying USB bring-up) and wrongly settle on
+// slave, usb_disconnect()'d, typing nothing until replugged. Since it's
+// still sitting on the cable, its own USB port will come alive once the
+// host really does bring USB up — so periodically retry enumeration here
+// too, and once it succeeds, reset: split_pre_init() re-runs from scratch on
+// a fully-up USB port and this time correctly picks master immediately.
+// Bounded to ~60s of retries; a half with genuinely no cable never sees
+// CONFIGURED and just stays slave, as it should.
+static void retry_master_promotion(void) {
+    static uint32_t next_check = 3000;
+    static uint8_t  attempts   = 0;
+
+    if (attempts >= 20) return; // ~60s of retries, then stay slave for good
+    if (timer_read32() < next_check) return;
+
+    if (usb_device_state_get_configure_state() == USB_DEVICE_STATE_CONFIGURED) {
+        NVIC_SystemReset(); // a host showed up after all - re-decide from scratch
+    }
+    attempts++;
+    next_check = timer_read32() + 3000;
+    restart_usb_driver(&USB_DRIVER);
+}
+
+void housekeeping_task_kb(void) {
+    if (is_keyboard_master()) {
+        retry_master_enumeration();
+    } else {
+        retry_master_promotion();
+    }
+}

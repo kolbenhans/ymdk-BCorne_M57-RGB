@@ -28,3 +28,9 @@
 #define SPLIT_TRANSACTION_IDS_USER \
     KEY_COLORS_COLORS_DELTA, KEY_COLORS_BLINK_DELTA, KEY_COLORS_LOCK_FLAGS_DELTA, \
     KEY_COLORS_COMMIT, KEY_COLORS_STARTUP
+
+// key_colors persists 7 bytes per LED per layer in the EEPROM datablock. With
+// the board default of 10 layers (4060 B) "Save EEPROM" left the master with
+// its keymap and colors wiped after a replug; 6 and 8 layers (3248 B) are fine.
+#undef DYNAMIC_KEYMAP_LAYER_COUNT
+#define DYNAMIC_KEYMAP_LAYER_COUNT 8

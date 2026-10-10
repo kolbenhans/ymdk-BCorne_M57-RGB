@@ -14,6 +14,7 @@ bool audio_visualizer_hid_handle_command(uint8_t *data, uint8_t length) {
     switch (data[1]) {
         case 0xA3:
             audio_visualizer_trigger();
+            rgb_matrix_enable_noeeprom(); // in case a prior brightness/mode write left it off
             rgb_matrix_mode_noeeprom(RGB_MATRIX_COMMUNITY_MODULE_audio_visualizer);
             return true;
     }

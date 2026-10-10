@@ -97,6 +97,7 @@ void raw_hid_receive_kb(uint8_t *data, uint8_t length) {
     switch (data[1]) {
         case 0xA4: // ACTIVATE_KEY_COLORS: switch into key_colors mode
             key_colors_on_mode_enter();
+            rgb_matrix_enable_noeeprom(); // in case a prior brightness/mode write left it off
             rgb_matrix_mode_noeeprom(RGB_MATRIX_COMMUNITY_MODULE_key_colors);
             break;
 

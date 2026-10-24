@@ -1,6 +1,7 @@
 # BORNE Knobs Corne4×6 (M57)
 
-Custom **Vial-QMK firmware for the BORNE Knobs Corne4×6 split keyboard** (internal model name `M57`; Corne-style, STM32F401, TinyUF2 bootloader).
+Custom **Vial-QMK firmware for the BORNE Knobs Corne4×6 split keyboard** ([https://ymdkey.com](https://ymdkey.com/products/borne-knobs-corne4-6-layout-58-keys-ergonomic-wired-hot-swap-split-mx-mechanical-keyboard-south-rgb-qmk-vial-programmable)
+internal model name `M57`; Corne-style, STM32F401, TinyUF2 bootloader).
 
 Four firmware variants are available:
 
